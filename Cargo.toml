@@ -1,0 +1,11 @@
+[package]
+name = "symm"
+version = "0.1.0"
+edition = "2021"
+description = "Simple symlink manager"
+license = "MIT"
+repository = "https://github.com/tednaaa/symm"
+
+[dependencies]
+dirs = "5.0.1"
+toml = "0.8.19"
