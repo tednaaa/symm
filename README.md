@@ -8,7 +8,7 @@ cargo install symm
 ```
 > Usage
 
-- Here is example file
+- Here is example file, currently only looking to `~/dotfiles/dotfiles.toml`
 
 ```toml
 [symlinks]
