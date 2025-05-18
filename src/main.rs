@@ -31,7 +31,7 @@ fn main() -> Result<(), std::io::Error> {
 			}
 			"unlink" => {
 				for value in symlinks.values() {
-					let symlink_target_path = dotfiles_dir.join(value);
+					let symlink_target_path = home_dir.join(value);
 
 					commands::unlink(&symlink_target_path)?
 				}
