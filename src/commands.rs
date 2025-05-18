@@ -15,12 +15,12 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 	}
 
 	if let Err(error) = symlink(original_path, symlink_target_path) {
-		if error.kind() != std::io::ErrorKind::AlreadyExists {
-			Err(error)?;
+		if error.kind() == std::io::ErrorKind::AlreadyExists {
+			println!("❌ File already exists: {:?}", symlink_target_path);
+			return Ok(());
 		}
 
-		println!("❌ File already exists: {:?}", symlink_target_path);
-		return Ok(());
+		Err(error)?
 	}
 
 	println!("✅ Symlink created: {:?} -> {:?}", symlink_target_path, original_path);
