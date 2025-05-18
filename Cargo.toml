@@ -7,5 +7,6 @@ license = "MIT"
 repository = "https://github.com/tednaaa/symm"
 
 [dependencies]
-dirs = "5.0.1"
-toml = "0.8.19"
+clap = { version = "4.5.38", features = ["derive"] }
+dirs = "6.0.0"
+toml = "0.8.22"
