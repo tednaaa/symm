@@ -1,14 +1,12 @@
-### Simple plugin to manage symlinks for dotfiles
-
-> Installation
+### Installation
 
 ```fish
 cargo install symm
-
 ```
-> Usage
 
-- Here is example file, currently only looking to `~/dotfiles/dotfiles.toml`
+### Usage
+
+- The configuration file is located at `~/dotfiles/dotfiles.toml`. Here's an example:
 
 ```toml
 [symlinks]
@@ -17,7 +15,7 @@ cargo install symm
 "nvim" = ".config/nvim"
 ```
 
-- There is only 2 commands, link and unlink
+- There are only 2 commands: link and unlink
 
 ```fish
 symm link
