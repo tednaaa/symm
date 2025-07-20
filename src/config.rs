@@ -3,21 +3,23 @@ use std::fs::File;
 use std::io::{self, Read};
 use std::path::PathBuf;
 
-const CONFIG_DIR: &str = "dotfiles";
+const DOTFILES_DIR: &str = "dotfiles";
 const CONFIG_FILE: &str = "dotfiles.toml";
+const CONFIGS_DIR: &str = ".configs";
 
 pub struct ConfigPaths {
 	pub home_dir: PathBuf,
-	pub dotfiles_dir: PathBuf,
+	pub configs_dir: PathBuf,
 	pub config_path: PathBuf,
 }
 
 pub fn get_config_paths() -> Result<ConfigPaths, std::io::Error> {
 	if let Some(home_dir) = dirs::home_dir() {
-		let dotfiles_dir = home_dir.join(CONFIG_DIR);
+		let dotfiles_dir = home_dir.join(DOTFILES_DIR);
+		let configs_dir = dotfiles_dir.join(CONFIGS_DIR);
 		let config_path = dotfiles_dir.join(CONFIG_FILE);
 
-		return Ok(ConfigPaths { home_dir, dotfiles_dir, config_path });
+		return Ok(ConfigPaths { home_dir, configs_dir, config_path });
 	}
 
 	Err(io::Error::new(io::ErrorKind::NotFound, "No home directory found"))

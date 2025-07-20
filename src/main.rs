@@ -15,13 +15,13 @@ fn main() -> Result<(), std::io::Error> {
 	let cli = Cli::parse();
 
 	let symlinks = config::get_symlinks()?;
-	let ConfigPaths { home_dir, dotfiles_dir, .. } = config::get_config_paths()?;
+	let ConfigPaths { home_dir, configs_dir, .. } = config::get_config_paths()?;
 
 	if let Some(command) = cli.command.as_deref() {
 		match command {
 			"link" => {
 				for (key, value) in symlinks {
-					let original_path = dotfiles_dir.join(key);
+					let original_path = configs_dir.join(key);
 					let symlink_target_path = home_dir.join(value);
 
 					commands::link(&original_path, &symlink_target_path)?
