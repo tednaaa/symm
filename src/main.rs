@@ -15,9 +15,7 @@ fn main() -> Result<(), std::io::Error> {
 	let cli = Cli::parse();
 
 	let symlinks = config::get_symlinks()?;
-	let ConfigPaths {
-		home_dir, dotfiles_dir, ..
-	} = config::get_config_paths()?;
+	let ConfigPaths { home_dir, dotfiles_dir, .. } = config::get_config_paths()?;
 
 	if let Some(command) = cli.command.as_deref() {
 		match command {
@@ -28,14 +26,14 @@ fn main() -> Result<(), std::io::Error> {
 
 					commands::link(&original_path, &symlink_target_path)?
 				}
-			}
+			},
 			"unlink" => {
 				for value in symlinks.values() {
 					let symlink_target_path = home_dir.join(value);
 
 					commands::unlink(&symlink_target_path)?
 				}
-			}
+			},
 			_ => println!("Such command does not exist"),
 		}
 	}

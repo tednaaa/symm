@@ -17,11 +17,7 @@ pub fn get_config_paths() -> Result<ConfigPaths, std::io::Error> {
 		let dotfiles_dir = home_dir.join(CONFIG_DIR);
 		let config_path = dotfiles_dir.join(CONFIG_FILE);
 
-		return Ok(ConfigPaths {
-			home_dir,
-			dotfiles_dir,
-			config_path,
-		});
+		return Ok(ConfigPaths { home_dir, dotfiles_dir, config_path });
 	}
 
 	Err(io::Error::new(io::ErrorKind::NotFound, "No home directory found"))
@@ -40,9 +36,6 @@ pub fn get_symlinks() -> Result<HashMap<String, String>, std::io::Error> {
 	if let Some(symlinks) = config.get("symlinks") {
 		Ok(symlinks.clone())
 	} else {
-		Err(io::Error::new(
-			io::ErrorKind::NotFound,
-			"Missing [symlinks] section in config",
-		))
+		Err(io::Error::new(io::ErrorKind::NotFound, "Missing [symlinks] section in config"))
 	}
 }
