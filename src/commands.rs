@@ -28,8 +28,14 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 }
 
 pub fn unlink(symlink_target_path: &Path) -> Result<(), std::io::Error> {
-	if symlink_target_path.exists() {
+	if !symlink_target_path.exists() {
+		return Ok(());
+	}
+
+	if symlink_target_path.is_file() {
 		fs::remove_file(symlink_target_path)?;
+	} else if symlink_target_path.is_dir() {
+		fs::remove_dir_all(symlink_target_path)?;
 	}
 
 	println!("✅ Deleted: {symlink_target_path:?}");
