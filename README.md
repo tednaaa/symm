@@ -1,10 +1,22 @@
-### Installation
+## Installation
+
+### 📦 crates.io
+
+You can install `symm` from [crates.io](https://crates.io/crates/symm)
 
 ```fish
 cargo install symm
 ```
 
-### Usage
+### 🐧 Arch Linux (AUR)
+
+You can install `symm` from the [aur repository](https://aur.archlinux.org/packages/symm)
+
+```fish
+yay -S symm
+```
+
+## Usage
 
 - The configuration file is located at `~/dotfiles/dotfiles.toml`. Here's an example:
 
