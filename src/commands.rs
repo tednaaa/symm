@@ -1,9 +1,5 @@
 use ansi_term::Colour::{Black, Cyan, Green, Red};
-use std::{
-	fs,
-	os::unix::fs::symlink,
-	path::{Path, PathBuf},
-};
+use std::{fs, os::unix::fs::symlink, path::Path};
 
 use symm::prettify_path;
 
