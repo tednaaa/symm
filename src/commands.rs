@@ -38,7 +38,12 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 		Err(error)?
 	}
 
-	println!("✅ Symlink created: {pretty_original_path} → {pretty_symlink_target_path}");
+	println!(
+		"✅ Symlink created: {} {} {}",
+		Cyan.paint(pretty_original_path),
+		Black.paint("→"),
+		Green.paint(pretty_symlink_target_path)
+	);
 	Ok(())
 }
 
