@@ -1,3 +1,4 @@
+use ansi_term::Colour::{Black, Cyan, Green, Red};
 use std::{
 	fs,
 	os::unix::fs::symlink,
@@ -13,7 +14,12 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 	if symlink_target_path.exists() {
 		if let Ok(existing_target) = fs::read_link(symlink_target_path) {
 			if existing_target == original_path {
-				println!("✅ Already linked: {pretty_symlink_target_path} → {pretty_original_path}");
+				println!(
+					"✅ Already linked: {} {} {}",
+					Cyan.paint(pretty_original_path),
+					Black.paint("→"),
+					Green.paint(pretty_symlink_target_path)
+				);
 				return Ok(());
 			}
 		}
@@ -25,14 +31,19 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 
 	if let Err(error) = symlink(original_path, symlink_target_path) {
 		if error.kind() == std::io::ErrorKind::AlreadyExists {
-			println!("❌ File already exists: {pretty_symlink_target_path}");
+			println!("❌ File/Directory already exists {} {}", Black.paint("→"), Red.paint(pretty_symlink_target_path));
 			return Ok(());
 		}
 
 		Err(error)?
 	}
 
-	println!("✅ Symlink created: {pretty_symlink_target_path} → {pretty_original_path}");
+	println!(
+		"✅ Symlink created: {} {} {}",
+		Cyan.paint(pretty_original_path),
+		Black.paint("→"),
+		Green.paint(pretty_symlink_target_path)
+	);
 	Ok(())
 }
 
@@ -47,8 +58,8 @@ pub fn unlink(symlink_target_path: &Path) -> Result<(), std::io::Error> {
 		fs::remove_dir_all(symlink_target_path)?;
 	}
 
-	let pretty_path = prettify_path(symlink_target_path);
-	println!("✅ Deleted: {pretty_path}");
+	let pretty_symlink_target_path = prettify_path(symlink_target_path);
+	println!("✅ Deleted: {}", Red.paint(pretty_symlink_target_path));
 
 	Ok(())
 }
