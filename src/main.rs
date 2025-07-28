@@ -1,3 +1,4 @@
+use ansi_term::Colour::Red;
 use clap::Parser;
 use config::ConfigPaths;
 
@@ -34,7 +35,7 @@ fn main() -> Result<(), std::io::Error> {
 					commands::unlink(&symlink_target_path)?
 				}
 			},
-			_ => println!("Such command does not exist"),
+			_ => eprintln!("{}", Red.paint(format!("Command {command} does not exist"))),
 		}
 	}
 
