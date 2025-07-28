@@ -31,7 +31,7 @@ pub fn link(original_path: &Path, symlink_target_path: &Path) -> Result<(), std:
 
 	if let Err(error) = symlink(original_path, symlink_target_path) {
 		if error.kind() == std::io::ErrorKind::AlreadyExists {
-			println!("❌ File already exists {} {}", Black.paint("→"), Red.paint(pretty_symlink_target_path));
+			println!("❌ File/Directory already exists {} {}", Black.paint("→"), Red.paint(pretty_symlink_target_path));
 			return Ok(());
 		}
 
