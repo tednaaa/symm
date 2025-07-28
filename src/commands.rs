@@ -58,8 +58,8 @@ pub fn unlink(symlink_target_path: &Path) -> Result<(), std::io::Error> {
 		fs::remove_dir_all(symlink_target_path)?;
 	}
 
-	let pretty_path = prettify_path(symlink_target_path);
-	println!("✅ Deleted: {pretty_path}");
+	let pretty_symlink_target_path = prettify_path(symlink_target_path);
+	println!("✅ Deleted: {}", Red.paint(pretty_symlink_target_path));
 
 	Ok(())
 }
