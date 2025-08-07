@@ -1,6 +1,6 @@
 [package]
 name = "symm"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 license = "MIT"
 description = "Simple symlink manager"
@@ -10,8 +10,8 @@ readme = "README.md"
 keywords = ["symlink", "manager", "cli"]
 
 [dependencies]
-clap = { version = "4.5.41", features = ["derive"] }
+clap = { version = "4.5.43", features = ["derive"] }
 dirs = "6.0.0"
-toml = "0.9.2"
+toml = "0.9.5"
 
 ansi_term = "0.12.1"
