@@ -80,7 +80,7 @@ pub fn install() -> Result<(), std::io::Error> {
 		.args(["-S", "--needed", "--noconfirm"])
 		.args(&packages)
 		.status()
-		.map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Failed to run pacman: {}", e)))?;
+		.map_err(|e| std::io::Error::other(format!("Failed to run pacman: {}", e)))?;
 
 	if status.success() {
 		println!("{}", Green.paint("✅ Packages installed successfully!"));
@@ -110,10 +110,10 @@ fn get_installed_packages() -> Result<Vec<String>, std::io::Error> {
 	let output = Command::new("pacman")
 		.args(["-Qq"])
 		.output()
-		.map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Failed to run pacman: {}", e)))?;
+		.map_err(|e| std::io::Error::other(format!("Failed to run pacman: {}", e)))?;
 
 	if !output.status.success() {
-		return Err(io::Error::new(io::ErrorKind::Other, "pacman command failed"));
+		return Err(std::io::Error::other("pacman command failed"));
 	}
 
 	let packages = String::from_utf8_lossy(&output.stdout)
@@ -129,10 +129,10 @@ fn get_explicitly_installed_packages() -> Result<Vec<String>, std::io::Error> {
 	let output = Command::new("pacman")
 		.args(["-Qqe"])
 		.output()
-		.map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Failed to run pacman: {}", e)))?;
+		.map_err(|e| std::io::Error::other(format!("Failed to run pacman: {}", e)))?;
 
 	if !output.status.success() {
-		return Err(io::Error::new(io::ErrorKind::Other, "pacman command failed"));
+		return Err(std::io::Error::other("pacman command failed"));
 	}
 
 	let packages = String::from_utf8_lossy(&output.stdout)
