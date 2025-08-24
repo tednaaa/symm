@@ -9,9 +9,9 @@ mod packages;
 #[derive(Parser)]
 #[command(version, about = "Simple symlink and package manager", long_about = None)]
 struct Cli {
-	/// Command to run: 'link' (create symlinks), 'unlink' (remove symlinks), 'packages' (manage packages)
+	/// Command to run: 'link' | 'unlink' | 'packages'
 	command: Option<String>,
-	/// Subcommand for packages: 'diff' (show differences), 'sync' (install missing), 'export' (list installable packages)
+	/// Subcommand for packages: 'diff' | 'install'
 	subcommand: Option<String>,
 }
 
@@ -42,15 +42,14 @@ fn main() -> Result<(), std::io::Error> {
 				}
 			},
 			"packages" => match cli.subcommand.as_deref() {
-				Some("diff") => packages::packages_diff()?,
-				Some("sync") => packages::packages_sync()?,
-				Some("export") => packages::packages_export()?,
+				Some("diff") => packages::show_diff()?,
+				Some("install") => packages::install()?,
 				Some(subcommand) => {
-					eprintln!("{}", Red.paint(format!("Subcommand {subcommand} does not exist. Use: diff, sync, export")))
+					eprintln!("{}", Red.paint(format!("Subcommand {subcommand} does not exist.")))
 				},
-				None => eprintln!("{}", Red.paint("Missing subcommand. Use: packages <diff|sync|export>")),
+				None => eprintln!("{}", Red.paint("Missing subcommand.")),
 			},
-			_ => eprintln!("{}", Red.paint(format!("Command {command} does not exist. Use: link, unlink, packages"))),
+			_ => eprintln!("{}", Red.paint(format!("Command {command} does not exist."))),
 		}
 	}
 

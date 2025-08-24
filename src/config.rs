@@ -20,39 +20,6 @@ pub struct Config {
 	pub packages: Option<HashMap<String, Vec<String>>>,
 }
 
-pub fn get_base_packages() -> Vec<String> {
-	vec![
-		"base".to_string(),
-		"base-devel".to_string(),
-		"linux".to_string(),
-		"linux-firmware".to_string(),
-		"efibootmgr".to_string(),
-		"intel-ucode".to_string(),
-		"btrfs-progs".to_string(),
-		"snapper".to_string(),
-	]
-}
-
-pub fn get_system_packages() -> Vec<String> {
-	vec![
-		"networkmanager".to_string(),
-		"pipewire".to_string(),
-		"pipewire-alsa".to_string(),
-		"pipewire-jack".to_string(),
-		"pipewire-pulse".to_string(),
-		"wireplumber".to_string(),
-		"libpulse".to_string(),
-		"gst-plugin-pipewire".to_string(),
-		"pavucontrol".to_string(),
-		"bluez".to_string(),
-		"bluez-utils".to_string(),
-		"sof-firmware".to_string(),
-		"zram-generator".to_string(),
-		"git".to_string(),
-		"fish".to_string(),
-	]
-}
-
 pub fn get_config_paths() -> Result<ConfigPaths, std::io::Error> {
 	if let Some(home_dir) = dirs::home_dir() {
 		let dotfiles_dir = home_dir.join(DOTFILES_DIR);
