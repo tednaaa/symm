@@ -27,9 +27,16 @@ yay -S symm
 "nvim" = ".config/nvim"
 ```
 
-- There are only 2 commands: link and unlink
+- Commands for managing symlinks
 
 ```fish
 symm link
 symm unlink
+```
+
+> Commands for managing packages `currently only archlinux repos supported`
+
+```fish
+symm packages diff
+symm packages install
 ```
