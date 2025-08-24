@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::io::{self, Write};
 use std::process::Command;
 
-use crate::config::get_packages;
+use crate::config;
 
 pub fn show_diff() -> Result<(), std::io::Error> {
 	let explicitly_installed = get_explicitly_installed_packages()?;
@@ -13,7 +13,7 @@ pub fn show_diff() -> Result<(), std::io::Error> {
 	let all_installed = get_installed_packages()?;
 	let all_installed_set: HashSet<String> = all_installed.into_iter().collect();
 
-	let managed = get_managed_packages()?;
+	let managed = get_managed_packages(false)?;
 
 	let missing: Vec<&String> = managed.difference(&all_installed_set).sorted().collect();
 	let extra: Vec<&String> = explicitly_installed_set.difference(&managed).sorted().collect();
@@ -48,7 +48,8 @@ pub fn install() -> Result<(), std::io::Error> {
 	let all_installed = get_installed_packages()?;
 	let all_installed_set: HashSet<String> = all_installed.into_iter().collect();
 
-	let managed = get_managed_packages()?;
+	let managed = get_managed_packages(true)?;
+
 	let missing: Vec<&String> = managed.difference(&all_installed_set).collect();
 
 	if missing.is_empty() {
@@ -90,9 +91,13 @@ pub fn install() -> Result<(), std::io::Error> {
 	Ok(())
 }
 
-fn get_managed_packages() -> Result<HashSet<String>, std::io::Error> {
-	let packages_config = get_packages()?;
+fn get_managed_packages(trim_ignored: bool) -> Result<HashSet<String>, std::io::Error> {
+	let mut packages_config = config::get_packages()?;
 	let mut managed = HashSet::new();
+
+	if trim_ignored {
+		packages_config.remove("ignored");
+	}
 
 	for (_, package_list) in packages_config {
 		managed.extend(package_list);
