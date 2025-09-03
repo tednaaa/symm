@@ -63,16 +63,20 @@ pub fn install() -> Result<(), std::io::Error> {
 	}
 	println!();
 
-	print!("{}", Yellow.paint("Do you want to proceed? [y/N]: "));
-	io::stdout().flush()?;
+	let assume_yes = std::env::args().any(|arg| arg == "--noconfirm");
 
-	let mut input = String::new();
-	io::stdin().read_line(&mut input)?;
-	let input = input.trim().to_lowercase();
+	if !assume_yes {
+		eprint!("{}", Yellow.paint("Do you want to proceed? [y/N]: "));
+		io::stderr().flush()?;
 
-	if input != "y" && input != "yes" {
-		println!("Cancelled.");
-		return Ok(());
+		let mut input = String::new();
+		io::stdin().read_line(&mut input)?;
+		let input = input.trim().to_lowercase();
+
+		if input != "y" && input != "yes" {
+			eprintln!("{}", Red.paint("❌ Cancelled."));
+			return Ok(());
+		}
 	}
 
 	let packages: Vec<&str> = missing.iter().map(|s| s.as_str()).collect();
