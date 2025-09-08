@@ -18,6 +18,8 @@ yay -S symm
 
 ## Usage
 
+- You can also refer to [My Dotfiles](https://github.com/tednaaa/dotfiles/blob/main/dotfiles.toml)
+
 - The configuration file is located at `~/dotfiles/dotfiles.toml`. Here's an example:
 
 ```toml
