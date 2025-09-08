@@ -2,7 +2,6 @@ use ansi_term::Colour::Red;
 use clap::{Parser, Subcommand};
 use config::ConfigPaths;
 
-mod cli;
 mod config;
 mod packages;
 mod symlinks;
@@ -18,9 +17,10 @@ pub struct Cli {
 pub enum Commands {
 	/// Manage symlinks
 	Link,
+	/// Remove symlinks
 	Unlink,
-
 	/// Manage packages
+	#[command(subcommand)]
 	Packages(PackagesCommands),
 }
 
@@ -28,7 +28,6 @@ pub enum Commands {
 pub enum PackagesCommands {
 	/// Show missing packages
 	Diff,
-
 	/// Install missing packages
 	Install {
 		/// Skip confirmation prompt
@@ -49,7 +48,10 @@ fn main() -> Result<(), std::io::Error> {
 				let original_path = configs_dir.join(key);
 				let symlink_target_path = home_dir.join(value);
 
-				symlinks::link(&original_path, &symlink_target_path)?
+				match symlinks::link(&original_path, &symlink_target_path) {
+					Ok(_) => println!("Created symlink: {} -> {}", symlink_target_path.display(), original_path.display()),
+					Err(e) => eprintln!("{}", Red.paint(format!("Failed to create symlink: {}", e))),
+				}
 			}
 		},
 		Commands::Unlink => {
@@ -59,24 +61,22 @@ fn main() -> Result<(), std::io::Error> {
 			for value in symlinks.values() {
 				let symlink_target_path = home_dir.join(value);
 
-				symlinks::unlink(&symlink_target_path)?
+				match symlinks::unlink(&symlink_target_path) {
+					Ok(_) => println!("Removed symlink: {}", symlink_target_path.display()),
+					Err(e) => eprintln!("{}", Red.paint(format!("Failed to remove symlink: {}", e))),
+				}
 			}
 		},
-	}
-
-	if let Some(command) = cli.command {
-		match command {
-			"unlink" => {},
-			"packages" => match cli.subcommand.as_deref() {
-				Some("diff") => packages::show_diff()?,
-				Some("install") => packages::install()?,
-				Some(subcommand) => {
-					eprintln!("{}", Red.paint(format!("Subcommand {subcommand} does not exist.")))
-				},
-				None => eprintln!("{}", Red.paint("Missing subcommand.")),
+		Commands::Packages(packages_cmd) => match packages_cmd {
+			PackagesCommands::Diff => match packages::show_diff() {
+				Ok(_) => {},
+				Err(e) => eprintln!("{}", Red.paint(format!("Failed to show package diff: {}", e))),
 			},
-			_ => eprintln!("{}", Red.paint(format!("Command {command} does not exist."))),
-		}
+			PackagesCommands::Install { noconfirm } => match packages::install(noconfirm) {
+				Ok(_) => {},
+				Err(e) => eprintln!("{}", Red.paint(format!("Failed to install packages: {}", e))),
+			},
+		},
 	}
 
 	Ok(())

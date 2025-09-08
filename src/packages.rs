@@ -44,7 +44,7 @@ pub fn show_diff() -> Result<(), std::io::Error> {
 	Ok(())
 }
 
-pub fn install() -> Result<(), std::io::Error> {
+pub fn install(noconfirm: bool) -> Result<(), std::io::Error> {
 	let all_installed = get_installed_packages()?;
 	let all_installed_set: HashSet<String> = all_installed.into_iter().collect();
 
@@ -63,9 +63,7 @@ pub fn install() -> Result<(), std::io::Error> {
 	}
 	println!();
 
-	let assume_yes = std::env::args().any(|arg| arg == "--noconfirm");
-
-	if !assume_yes {
+	if !noconfirm {
 		eprint!("{}", Yellow.paint("Do you want to proceed? [y/N]: "));
 		io::stderr().flush()?;
 
