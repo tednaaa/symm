@@ -48,10 +48,7 @@ fn main() -> Result<(), std::io::Error> {
 				let original_path = configs_dir.join(key);
 				let symlink_target_path = home_dir.join(value);
 
-				match symlinks::link(&original_path, &symlink_target_path) {
-					Ok(_) => println!("Created symlink: {} -> {}", symlink_target_path.display(), original_path.display()),
-					Err(e) => eprintln!("{}", Red.paint(format!("Failed to create symlink: {}", e))),
-				}
+				symlinks::link(&original_path, &symlink_target_path)?;
 			}
 		},
 		Commands::Unlink => {
@@ -60,11 +57,7 @@ fn main() -> Result<(), std::io::Error> {
 
 			for value in symlinks.values() {
 				let symlink_target_path = home_dir.join(value);
-
-				match symlinks::unlink(&symlink_target_path) {
-					Ok(_) => println!("Removed symlink: {}", symlink_target_path.display()),
-					Err(e) => eprintln!("{}", Red.paint(format!("Failed to remove symlink: {}", e))),
-				}
+				symlinks::unlink(&symlink_target_path)?;
 			}
 		},
 		Commands::Packages(packages_cmd) => match packages_cmd {
