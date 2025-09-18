@@ -1,3 +1,7 @@
+## Requirments
+
+`paru` - to install packages
+
 ## Installation
 
 ### 📦 crates.io
@@ -13,7 +17,7 @@ cargo install symm
 You can install `symm` from the [aur repository](https://aur.archlinux.org/packages/symm)
 
 ```fish
-yay -S symm
+paru -S symm
 ```
 
 ## Usage
@@ -38,9 +42,8 @@ symm unlink
 
 <img width="840" height="468" alt="image" src="https://github.com/user-attachments/assets/3cc66921-f035-44ed-8cdf-717a35127134" />
 
-
 - Commands for managing packages
-> currently only archlinux repos supported
+  > currently only archlinux repos supported
 
 ```fish
 symm packages diff
@@ -48,4 +51,3 @@ symm packages install
 ```
 
 <img width="520" height="262" alt="image" src="https://github.com/user-attachments/assets/612d5220-4d0a-47cd-813d-4685fee6db26" />
-
