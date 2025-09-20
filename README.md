@@ -1,4 +1,4 @@
-## Requirments
+## Requirements
 
 `paru` - to install packages
 
