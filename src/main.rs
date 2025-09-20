@@ -1,40 +1,13 @@
 use ansi_term::Colour::Red;
-use clap::{Parser, Subcommand};
+use clap::Parser;
 use config::ConfigPaths;
 
+mod cli;
 mod config;
 mod packages;
 mod symlinks;
 
-#[derive(Parser)]
-#[command(version, about = "Simple symlink and package manager", long_about = None)]
-pub struct Cli {
-	#[command(subcommand)]
-	command: Commands,
-}
-
-#[derive(Subcommand)]
-pub enum Commands {
-	/// Manage symlinks
-	Link,
-	/// Remove symlinks
-	Unlink,
-	/// Manage packages
-	#[command(subcommand)]
-	Packages(PackagesCommands),
-}
-
-#[derive(Subcommand)]
-pub enum PackagesCommands {
-	/// Show missing packages
-	Diff,
-	/// Install missing packages
-	Install {
-		/// Skip confirmation prompt
-		#[arg(long)]
-		noconfirm: bool,
-	},
-}
+use cli::{Cli, Commands, PackagesCommands};
 
 fn main() -> Result<(), std::io::Error> {
 	let cli = Cli::parse();
