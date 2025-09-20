@@ -3,11 +3,11 @@ name = "symm"
 version = "0.7.0"
 edition = "2021"
 license = "MIT"
-description = "Simple symlink manager"
+description = "Simple dotfiles manager"
 homepage = "https://github.com/tednaaa/symm"
 repository = "https://github.com/tednaaa/symm"
 readme = "README.md"
-keywords = ["symlink", "manager", "cli"]
+keywords = ["symlink", "dotfiles", "manager", "cli"]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -15,5 +15,9 @@ itertools = "0.14.0"
 dirs = "6.0.0"
 toml = "0.9.7"
 
-clap = { version = "4.5.47", features = ["derive"] }
+clap = { version = "4.5.48", features = ["derive"] }
 ansi_term = "0.12.1"
+
+[build-dependencies]
+clap_complete = "4.5.58"
+clap = { version = "4.5.48", features = ["derive"] }
