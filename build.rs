@@ -1,7 +1,7 @@
 #[path = "src/cli.rs"]
 mod cli;
 
-use std::{env, io};
+use std::{env, fs, io, path::PathBuf};
 
 use clap::CommandFactory;
 use clap_complete::{generate_to, Shell};
@@ -16,14 +16,16 @@ fn main() -> io::Result<()> {
 }
 
 fn generate_completions() -> io::Result<()> {
-	let completion_dir = "completions";
-	std::fs::create_dir_all(completion_dir)?;
+	let target_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("target");
+	let completions_dir = target_dir.join("completions");
 
 	let mut cmd = Cli::command();
 	let bin_name = env!("CARGO_PKG_NAME");
 
+	fs::create_dir_all(&completions_dir)?;
+
 	for shell in [Shell::Bash, Shell::Fish, Shell::Zsh] {
-		generate_to(shell, &mut cmd, bin_name, completion_dir)?;
+		generate_to(shell, &mut cmd, bin_name, &completions_dir)?;
 	}
 
 	Ok(())
