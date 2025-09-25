@@ -34,7 +34,7 @@ fn main() -> Result<(), std::io::Error> {
 			}
 		},
 		Commands::Packages(packages_cmd) => match packages_cmd {
-			PackagesCommands::Diff => match packages::show_diff() {
+			PackagesCommands::Diff { ignored } => match packages::show_diff(ignored) {
 				Ok(_) => {},
 				Err(e) => eprintln!("{}", Red.paint(format!("Failed to show package diff: {}", e))),
 			},
