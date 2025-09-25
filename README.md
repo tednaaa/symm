@@ -1,24 +1,8 @@
+[![Packaging status](https://repology.org/badge/vertical-allrepos/symm.svg)](https://repology.org/project/symm/versions)
+
 ## Requirements
 
 `paru` - to install packages
-
-## Installation
-
-### 📦 crates.io
-
-You can install `symm` from [crates.io](https://crates.io/crates/symm)
-
-```fish
-cargo install symm
-```
-
-### 🐧 Arch Linux (AUR)
-
-You can install `symm` from the [aur repository](https://aur.archlinux.org/packages/symm)
-
-```fish
-paru -S symm
-```
 
 ## Usage
 
