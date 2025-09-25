@@ -9,7 +9,7 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-	/// Manage symlinks
+	/// Create symlinks
 	Link,
 	/// Remove symlinks
 	Unlink,
@@ -21,7 +21,11 @@ pub enum Commands {
 #[derive(Subcommand)]
 pub enum PackagesCommands {
 	/// Show missing packages
-	Diff,
+	Diff {
+		/// Show ignored packages
+		#[arg(long)]
+		ignored: bool,
+	},
 	/// Install missing packages
 	Install {
 		/// Skip confirmation prompt

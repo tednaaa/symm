@@ -6,20 +6,33 @@ use std::process::Command;
 
 use crate::config;
 
-pub fn show_diff() -> Result<(), std::io::Error> {
+pub fn show_diff(show_ignored: bool) -> Result<(), std::io::Error> {
 	let explicitly_installed = get_explicitly_installed_packages()?;
 	let explicitly_installed_set: HashSet<String> = explicitly_installed.into_iter().collect();
 
 	let all_installed = get_installed_packages()?;
 	let all_installed_set: HashSet<String> = all_installed.into_iter().collect();
 
-	let managed = get_managed_packages(false)?;
+	let packages = get_managed_packages()?;
 
-	let missing: Vec<&String> = managed.difference(&all_installed_set).sorted().collect();
-	let extra: Vec<&String> = explicitly_installed_set.difference(&managed).sorted().collect();
+	let mut all_managed_packages: HashSet<String> = HashSet::new();
+	all_managed_packages.extend(packages.managed.clone());
+	all_managed_packages.extend(packages.ignored.clone());
+
+	let missing: Vec<&String> = packages.managed.difference(&all_installed_set).sorted().collect();
+	let ignored: Vec<&String> = packages.ignored.difference(&all_installed_set).sorted().collect();
+	let extra: Vec<&String> = explicitly_installed_set.difference(&all_managed_packages).sorted().collect();
 
 	println!("{}", Blue.paint("📦 Package Status Overview"));
 	println!();
+
+	if show_ignored && !ignored.is_empty() {
+		println!("{} {}", Yellow.paint("⚠️ Ignored but not installed packages:"), ignored.len());
+		for pkg in &ignored {
+			println!("   {}", Yellow.paint(format!("~ {}", pkg)));
+		}
+		println!();
+	}
 
 	if !missing.is_empty() {
 		println!("{} {}", Green.paint("📥 Packages to install:"), missing.len());
@@ -48,9 +61,9 @@ pub fn install(noconfirm: bool) -> Result<(), std::io::Error> {
 	let all_installed = get_installed_packages()?;
 	let all_installed_set: HashSet<String> = all_installed.into_iter().collect();
 
-	let managed = get_managed_packages(true)?;
+	let packages = get_managed_packages()?;
 
-	let missing: Vec<&String> = managed.difference(&all_installed_set).collect();
+	let missing: Vec<&String> = packages.managed.difference(&all_installed_set).collect();
 
 	if missing.is_empty() {
 		println!("{}", Green.paint("✅ All packages are already installed!"));
@@ -93,19 +106,25 @@ pub fn install(noconfirm: bool) -> Result<(), std::io::Error> {
 	Ok(())
 }
 
-fn get_managed_packages(trim_ignored: bool) -> Result<HashSet<String>, std::io::Error> {
-	let mut packages_config = config::get_packages()?;
+struct ManagedPackages {
+	managed: HashSet<String>,
+	ignored: HashSet<String>,
+}
+
+fn get_managed_packages() -> Result<ManagedPackages, std::io::Error> {
+	let packages_config = config::get_packages()?;
 	let mut managed = HashSet::new();
+	let mut ignored = HashSet::new();
 
-	if trim_ignored {
-		packages_config.remove("ignored");
+	for (key, package_list) in packages_config {
+		if key == "ignored" {
+			ignored.extend(package_list);
+		} else {
+			managed.extend(package_list);
+		}
 	}
 
-	for (_, package_list) in packages_config {
-		managed.extend(package_list);
-	}
-
-	Ok(managed)
+	Ok(ManagedPackages { managed, ignored })
 }
 
 fn get_installed_packages() -> Result<Vec<String>, std::io::Error> {
